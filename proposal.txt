@@ -1,20 +1,22 @@
-
-Project Overview:
-Track the populaton of various species overtime and the influence they have on
-each other. 
+/*Project Overview:
+Track the populaton of various species over 10 year intervals and the influence 
+they have on each other through various extreme weather. 
 
 Implementation:
-A std::map to store which type of animal, herbivore & carnivore, which is categorized 
-into 3 seperate pools of young, adult, or old. each category will conatain 
-the species and age of various animals. 
-The type of animal will be the map's key.
-The array with the categorized animals will be the map's value.
+A std::map to store which type of animal, herbivore & carnivore,
+which is categorized into 3 seperate categories, young, adult, or old. 
+each category will conatain the species and age of various animals. 
+
+The type of animal will be the map's key. herbivore/carnivore.
+The array will contain a list of animal objects, with species and age, for young, adult, and old animals.
+Random weather, drought, flood, blizzard, as various states that effect animals.
 
 Simulated events:
-Simulation will focus on predation, and repoduction and how each type of animals
-population influences the other's. As well as how weather or other natural events
-influence both. 
-
+Simulation will focus on predation, and repoduction. 
+and how each type of animals population influences the other's. 
+As well as how weather or other natural events influence both.
+The key output is the population nd how the population of harbivors 
+    and carnivors balance overtime*/
 --------------------------------------------------------------------------------
 
    1. It needs to be a simulation.
