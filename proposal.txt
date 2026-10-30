@@ -1,4 +1,21 @@
 
+Project Overview:
+Track the populaton of various species overtime and the influence they have on
+each other. 
+
+Implementation:
+A std::map to store which type of animal, herbivore & carnivore, which is categorized 
+into 3 seperate pools of young, adult, or old. each category will conatain 
+the species and age of various animals. 
+The type of animal will be the map's key.
+The array with the categorized animals will be the map's value.
+
+Simulated events:
+Simulation will focus on predation, and repoduction and how each type of animals
+population influences the other's. As well as how weather or other natural events
+influence both. 
+
+--------------------------------------------------------------------------------
 
    1. It needs to be a simulation.
    2. The simulation can be anything in life or nature.
@@ -11,8 +28,8 @@
    9. The driver should show the initial state of the environment, and how it changes after a certain number of time periods. Use at least 25 time periods.
    10 The program must have at least one function.
 
-
  - Thoughts - 
+ if you're currious how i came to my proposal.
     reqs 1-3. makes me think of a population chart of certain species over time
     4-7. this is the real puzzle of the assignment lets break it down further
       4.  must be a map, so map<something something>, 
@@ -36,3 +53,15 @@
                 string name
                 int age 
         so map<string. array<list<animal>, 3> population. something like that.
+        is that usefull?
+
+    im getting stuck on step 7. the 100 lines of data. nvm just make a ton of animals
+
+    ok, 
+    map will have the keys "Herbivore" and "Carnivore"
+     an array of lists. 3 elements will hold data for "Young" "Adult" "Old"
+     those 3 elements will contain a list of animal objects.
+        Class animal
+                string species
+                int age 
+
