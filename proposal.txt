@@ -1,0 +1,24 @@
+
+
+   1. It needs to be a simulation.
+   2. The simulation can be anything in life or nature.
+   3. The simulation needs to be a discrete-event simulation (time-based).
+   4. The simulation must feature an std::map.
+   5. The simulation must retrieve data from an external file.
+   6. The value in the map's key-value pair must be a 3-element std::array of std::lists. This makes a nested data structure, with the outer map hosting an inner array of three lists.
+   7. There must be at least 100 lines of data processed by the program. LLM's are well-known for helping to generate data like this.
+   8. The driver program should neatly display the std::map data.
+   9. The driver should show the initial state of the environment, and how it changes after a certain number of time periods. Use at least 25 time periods.
+   10 The program must have at least one function.
+
+
+ - Thoughts - 
+    reqs 1-3. makes me think of a population chart of certain species over time
+    4-7. this si the real puzzle of the assignment lets break it down further
+      4.  must be a map, so map<something something>, 
+      5. the map will almost certainly be filled from an external file, not bad.
+      6. of the map pair, the value portion must be an arary of lists.
+        so.. map<something, array<list, #>> , i think thats how that works.
+      7. process 100 line of data, not so bad considering 5. 
+    8-9. are essentially the same just display the data nice.
+    10. is a given. at the very least the display function will work.
