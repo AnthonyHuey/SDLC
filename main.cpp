@@ -1,6 +1,5 @@
 // Anthony Huey - 10/30/2026 - COMSC 210 - Lab 29: SDLC
 // design a project that meets the requirements in the proposal.
-
 // Include, map,list,array,fstream,iostream,string and anything else
 #include <map>
 #include <string>
@@ -12,6 +11,7 @@
 using namespace std;
 
 //class for animals, species and age
+// realized this isn't actually that usefull, oh well.
 class Animal
 {
 private:
@@ -29,9 +29,11 @@ public:
  void setSpecies(string s) {species = s;}
 
 };
+
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
 const int MAX = 3, MONTHS = 12, E_MAX = 100; // eventually set MAX & MIN for each type of animal
-bool drought = 0, flooding = 0, blizzard = 0, cont = 0; // weather
+bool drought = 0, flooding = 0, blizzard = 0, // weather
+bool cont = 0; // for the simulation loop.
 
 // function dislpay, add, delete, count.
 void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
@@ -43,6 +45,7 @@ void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
 
 int countTotalAnimal(const map<string, array<list<Animal>, MAX>> pop, string type)
 { // return the amount of animals of a type (hrebivore/carnivore)
+    // this is for the random events weighting.
     auto it = pop.find(type); // search herb or carn
     
     int total = 0;
@@ -96,13 +99,11 @@ int main()
     display(population);
     
 
-    // Begin the simulation, 
-        // every x amount of time go through each type of animal
-            // decide if anyone starves/dies of old age. remove them. 
-                // for herbivors, decide if they are also predated
-            // decide if anyone reproduces
-                // generate a new animal add it to the list
-        // output the changes.
+    // Begin the simulation, user can loop as many times as they want.
+        // roll a dice which decides if an event happens,
+        // if an even occurs roll again to decide which one.
+    // output the changes.
+    // don't forget to add a wait at the end to 'simulate' time passing.
     int event = 10;
     while (cont != 1) // outer while loop to let user decide when to end sim
     {
@@ -110,18 +111,15 @@ int main()
         {
             cout << "\nMonth " << i << ": ";
 
-            // alright, i want a chance every month for a thing to happen,
-            // if nothing happens, the chance gets higher, reset once it does.
-            // lets say 10% for event, + 10% per miss.       
+// 10% chance per month for event. +10% per miss   
+// the event wieghting can be adjusted later, works for now
+// i want the population of certain groups to effect the odds.
+//      more herbivores means predation is more likely, 
+//      less herbivores mean starvation for carnivores is more likely and so on.
+// the weather add another push/pull to the odds, can be added later easy.
             if ((rand() % E_MAX) <= event)
             {
                 cout << "Got an event!";
-                // ok, the events will be as follows loosly
-                // reproduction, 25% chance? -10% during any weather
-                // starvation, 10% chance? +25% during any weather
-                // predation, 25% chance? - 20% during blizzard
-                // weather change - 5% chance last only a single month.
-                // ahh, i'll roll like usual, and what i roll determines event.
                 int roll = (rand() % E_MAX);
                 cout << "\nDEBUG - Rolled a: " << roll << endl;
                 if (roll < 25 )
@@ -129,9 +127,11 @@ int main()
                     cout << "\nREPRODUCTION\n";
                     // herbivore alwasy reproduce 50/50 for carnivore
                     addAnimal(population, "herbivore", "test", 1);
+                    cout << "\nA new herbivore was born!";
                     if ((rand() % E_MAX) <= 50) 
                     {   // make animal random later ------------*
                         addAnimal(population, "carnivore", "test", 1);
+                        cout << "\nA new carnivore was born!";
                     }
                 }
                 else if (roll < 35) 
@@ -142,13 +142,17 @@ int main()
                         population["herbivore"][YOUNG].pop_front();
                         population["herbivore"][YOUNG].pop_front();
                         population["herbivore"][YOUNG].pop_front();
+                        cout << "\n3 herbivore's died from starvation!";
                     }
                     else
                         population["herbivore"][YOUNG].pop_front();
+                        cout << "\nA herbivore died from starvation!";
                 }
                 else if (roll < 60)
                 {
                     cout << "\nPREDATION\n";
+                    population["herbivore"][YOUNG].pop_front();
+                    cout << "\nA carnivore ate a herbivore!";
 
                 }
                 else if (roll < 65)// start a certain weather
@@ -170,7 +174,6 @@ int main()
             }
 
         }
-
         display(population);
         char YN = 'Y';
         cout << "\nWould you like to continue the simulation? (Y/N): ";
@@ -178,15 +181,5 @@ int main()
         if (YN == 'N' || YN == 'n')
             cont = 1;
     }
-
- // the population of one animal influence the other is the main idea,
-    // more herbivore's leads to more carnivores, which leads to less herbivores
-        // a cylcle the balances itself is the idea.
-        // the balance is influence by natural events, 
-            // see if balance can return to normal from such events.
-
-
+    cout << "\nGoodybye!";
 }
-   
-        
-// End
