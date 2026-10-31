@@ -30,7 +30,7 @@ public:
 
 };
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
-const int MAX = 3, MONTHS = 12; // eventually set MAX & MIN for each type of animal
+const int MAX = 3, MONTHS = 12, E_MAX = 100; // eventually set MAX & MIN for each type of animal
 bool drought = 0, flooding = 0, blizzard = 0, cont = 0;
 // function defs for display, and probably time simulation/interval.
     // funcs for removing/adding animals
@@ -57,6 +57,7 @@ void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
        // animal object will contain  - sspecies and age.
 int main()
 {
+    srand(time(0));
     map<string, array<list<Animal>, MAX>> population;
 
        
@@ -89,11 +90,30 @@ int main()
         // output the changes.
     while (cont != 1) // outer while loop to let user decide when to end
     {
-        for(int i = 0; i < MONTHS; i++) // progress by months
+        for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
+            cout << "\nMonth " << i << ": ";
+
+            // alright, i want a chance every month for a thing to happen,
+            // if nothing happens, the chance gets higher, reset once it does.
+            // lets say 10% for event, + 10% per miss.
+            int event = 10; // base
+            event += 10; // +10
+            event = 10; // reset
+          
+            if ((rand() % E_MAX) <= event)
+            {
+                cout << "Got an event!";
+                event = 10;
+            }
+            else
+            {
+                cout << "Nothing occured...";
+                event += 10;
+            }
 
         }
-        
+
         display(population);
         char YN = 'Y';
         cout << "\nWould you like to continue the simulation? (Y/N): ";
