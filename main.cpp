@@ -36,10 +36,15 @@ const int MAX = 3; // eventually set MAX & MIN for each type of animal
     // funcs for removing/adding animals
 void display(map<string, array<list<Animal>, MAX>> pop)
 {
+    // make this an iterator over the whole list later
     cout << pop["herbivore"][YOUNG].front().getSpecies();
     cout << " (age: " << pop["herbivore"][YOUNG].front().getAge() << ")";
 }
-
+void addAnimal(map<string, array<list<Animal>, MAX>> &pop, 
+                                string t, string s, int a)
+{ 
+    pop[t][YOUNG].push_back(Animal(s, a));
+}
 // states for extreme weather, drought, flooding, blizzard, etc.
     // influences starvation, reproduction of certain animals.
 bool drought, flooding, blizzard = 0;
@@ -50,11 +55,21 @@ bool drought, flooding, blizzard = 0;
 int main()
 {
     map<string, array<list<Animal>, MAX>> population;
-    population["herbivore"][YOUNG].push_back(Animal("Zebra", 1));
-    population["carnivore"][ADULT].push_back(Animal("Lion", 12));
-   
+
+    addAnimal(population);
     display(population);
- 
+    ifstream fin;
+    fin.open("animals.txt");
+    if (fin.good())
+    {
+        string type;
+        string species;
+        int age;
+        addAnimal(population, type, species, age);
+        fin.close();    
+    }
+    else
+        cout << "File not found!\n";
 
 }
         // animal object will contain  - sspecies and age.
