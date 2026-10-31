@@ -47,6 +47,11 @@ void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
     int stage = (a < 3) ? YOUNG : (a < 8) ? ADULT : OLD; 
     pop[t][stage].push_back(Animal(s, a));
 }
+int countAnimal(const map<string, array<list<Animal>, MAX>> pop string type)
+{ // return the amount of animals of a type (hrebivore/carnivore)
+    int total = 0;
+
+}
 // states for extreme weather, drought, flooding, blizzard, etc.
     // influences starvation, reproduction of certain animals.
 
@@ -87,7 +92,7 @@ int main()
                 // generate a new animal add it to the list
         // output the changes.
     int event = 10;
-    while (cont != 1) // outer while loop to let user decide when to end
+    while (cont != 1) // outer while loop to let user decide when to end sim
     {
         for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
@@ -99,7 +104,7 @@ int main()
             if ((rand() % E_MAX) <= event)
             {
                 cout << "Got an event!";
-                // ok, the events will be as follows
+                // ok, the events will be as follows loosly
                 // reproduction, 25% chance? -10% during any weather
                 // starvation, 10% chance? +25% during any weather
                 // predation, 25% chance? - 20% during blizzard
@@ -120,24 +125,29 @@ int main()
                 else if (roll < 35) 
                 { // random amount between 1-3ish
                     cout <<"\nSTARVATION\n";
-                    population["herbivore"][YOUNG].pop_front();
-                    population["carnivore"][ADULT].pop_front();
+                    if (rand() % E_MAX < 50) // rough idea
+                    { // will prob crash need to validate
+                        population["herbivore"][YOUNG].pop_front();
+                        population["herbivore"][YOUNG].pop_front();
+                        population["herbivore"][YOUNG].pop_front();
+                    }
+                    else
+                        population["herbivore"][YOUNG].pop_front();
                 }
                 else if (roll < 60)
                 {
                     cout << "\nPREDATION\n";
+
                 }
-                else if (roll < 65)
-                {
+                else if (roll < 65)// start a certain weather
+                { // these will effect the rolls above
                     cout << "\nWEATHER\n";
-                }
-                else if (roll < 75)
-                {
-                    cout <<"\nMIGRATION\n";
-                }
-                else
-                {
-                    cout <<"\nidk\n";
+                    if (rand() % E_MAX < 33) 
+                        drought = 1;
+                    else if (rand() % E_MAX < 66)
+                        flooding = 1;
+                    else if (rand() % E_MAX < 99)
+                        blizzard = 1;  
                 }
                 event = 10; // reset event chance.
             }
@@ -156,12 +166,15 @@ int main()
         if (YN == 'N' || YN == 'n')
             cont = 1;
     }
-            
-}
-    // the population of one animal influence the other is the main idea,
+
+ // the population of one animal influence the other is the main idea,
     // more herbivore's leads to more carnivores, which leads to less herbivores
         // a cylcle the balances itself is the idea.
         // the balance is influence by natural events, 
-            // see if balance can return from such events.
+            // see if balance can return to normal from such events.
+
+
+}
+   
         
 // End
