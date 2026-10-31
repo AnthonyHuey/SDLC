@@ -30,13 +30,14 @@ public:
 
 };
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
-const int MAX = 3; // eventually set MAX & MIN for each type of animal
-
+const int MAX = 3, MONTHS = 12; // eventually set MAX & MIN for each type of animal
+bool drought = 0, flooding = 0, blizzard = 0, cont = 0;
 // function defs for display, and probably time simulation/interval.
     // funcs for removing/adding animals
 void display(map<string, array<list<Animal>, MAX>> pop)
 {
     // make this an iterator over the whole list later
+        // also i dont need a specific animal, just the size.
     cout << pop["herbivore"][YOUNG].front().getSpecies();
     cout << " (age: " << pop["herbivore"][YOUNG].front().getAge() << ")";
 }
@@ -48,14 +49,20 @@ void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
 }
 // states for extreme weather, drought, flooding, blizzard, etc.
     // influences starvation, reproduction of certain animals.
-bool drought = 0, flooding = 0, blizzard = 0;
+
 
 
 // Main
     // Initialize map, stores animall type, and the array for the list of animals
+       // animal object will contain  - sspecies and age.
 int main()
 {
     map<string, array<list<Animal>, MAX>> population;
+
+       
+    // Fill the map with data from file, animal species, age, etc. 
+        // give an error if fail to open
+        // close file
     ifstream fin;
     fin.open("animals.txt");
     if (fin.good())
@@ -73,21 +80,32 @@ int main()
     display(population);
     
 
-}
-        // animal object will contain  - sspecies and age.
-    // Fill the map with data from file, animal species, age, etc. 
-        // give an error if fail to open
-        // close file
-
     // Begin the simulation, 
         // every x amount of time go through each type of animal
             // decide if anyone starves/dies of old age. remove them. 
                 // for herbivors, decide if they are also predated
             // decide if anyone reproduces
                 // generate a new animal add it to the list
-            
         // output the changes.
+    while (cont != 1) // outer while loop to let user decide when to end
+    {
+        for(int i = 0; i < MONTHS; i++) // progress by months
+        {
+
+        }
         
+        display(population);
+        char YN = 'Y';
+        cout << "\nWould you like to continue the simulation? (Y/N): ";
+        cin >> YN;
+        if (YN == 'N' || YN == 'n')
+            cont = 1;
+    }
+            
+}
+  
+
+  
     // decide if any special events occur.
         // migration, extreame weather.
     
