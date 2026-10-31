@@ -31,36 +31,48 @@ public:
 };
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
 const int MAX = 3, MONTHS = 12, E_MAX = 100; // eventually set MAX & MIN for each type of animal
-bool drought = 0, flooding = 0, blizzard = 0, cont = 0;
-// function defs for display, and probably time simulation/interval.
-    // funcs for removing/adding animals
-void display(map<string, array<list<Animal>, MAX>> pop)
-{
-    // make this an iterator over the whole list later
-        // also i dont need a specific animal, just the size.
-    cout << pop["herbivore"][YOUNG].front().getSpecies();
-    cout << " (age: " << pop["herbivore"][YOUNG].front().getAge() << ")";
-}
-void addAnimal(map<string, array<list<Animal>, MAX>> &pop, 
-                                string t, string s, int a)
+bool drought = 0, flooding = 0, blizzard = 0, cont = 0; // weather
+
+// function dislpay, add, delete, count.
+void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
+                                                 string t, string s, int a)
 { 
     int stage = (a < 3) ? YOUNG : (a < 8) ? ADULT : OLD; 
     pop[t][stage].push_back(Animal(s, a));
 }
-int countAnimal(const map<string, array<list<Animal>, MAX>> pop string type)
+
+int countTotalAnimal(const map<string, array<list<Animal>, MAX>> pop, string type)
 { // return the amount of animals of a type (hrebivore/carnivore)
+    auto it = pop.find(type); // search herb or carn
+    
     int total = 0;
-
+    for (const auto& stage : it->second) // each list in array
+        total += stage.size();
+    return total;
 }
-// states for extreme weather, drought, flooding, blizzard, etc.
-    // influences starvation, reproduction of certain animals.
 
-// Main
-    // Initialize map, stores animall type, and the array for the list of animals
-       // animal object will contain  - sspecies and age.
+int countAnimal(const map<string, array<list<Animal>, MAX>> pop, string type, int age)
+{
+    auto it = pop.find(type); // search herb or carn
+    return it->second[age].size(); // return size of that specific age group
+}
+
+void display(map<string, array<list<Animal>, MAX>> pop)
+{
+
+    cout << "\n\t\tYOUNG \tADULT \tOLD";
+    cout << "\nHERBIVORE|";
+    cout << "\t" << countAnimal(pop, "herbivore", YOUNG);
+    cout << "\t" << countAnimal(pop, "herbivore", ADULT);
+    cout << "\t" << countAnimal(pop, "herbivore", OLD);
+    cout << "\nCARNIVORE|";
+    cout << "\t" << countAnimal(pop, "carnivore", YOUNG);
+    cout << "\t" << countAnimal(pop, "carnivore", ADULT);
+    cout << "\t" << countAnimal(pop, "carnivore", OLD);
+}
 int main()
 {
-    srand(time(0));
+    srand(time(0)); // for the random event rolls
     map<string, array<list<Animal>, MAX>> population;
     //array<string, 3> herb = {"Zebra", "Giraffe", "Gazelle"};// for random animals
        
