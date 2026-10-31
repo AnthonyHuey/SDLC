@@ -88,6 +88,7 @@ int main()
             // decide if anyone reproduces
                 // generate a new animal add it to the list
         // output the changes.
+    int event = 10;
     while (cont != 1) // outer while loop to let user decide when to end
     {
         for(int i = 0; i < MONTHS; i++) // progress by "months"
@@ -96,15 +97,31 @@ int main()
 
             // alright, i want a chance every month for a thing to happen,
             // if nothing happens, the chance gets higher, reset once it does.
-            // lets say 10% for event, + 10% per miss.
-            int event = 10; // base
-            event += 10; // +10
-            event = 10; // reset
-          
+            // lets say 10% for event, + 10% per miss.       
             if ((rand() % E_MAX) <= event)
             {
                 cout << "Got an event!";
-                event = 10;
+                // ok, the events will be as follows
+                // reproduction, 25% chance? -10% during any weather
+                // starvation, 10% chance? +25% during any weather
+                // predation, 25% chance? - 20% during blizzard
+                // weather change - 5% chance last only a single month.
+                // ahh, i'll roll like usual, and what i roll determines event.
+                int roll = (rand() % E_MAX);
+                cout << "\nDEBUG - Rolled a: " << roll << endl;
+                if (roll < 25 )
+                    cout << "\nREPRODUCTION\n";
+                else if (roll < 35)
+                    cout <<"\nSTARVATION\n";
+                else if (roll < 60)
+                    cout << "\nPREDATION\n";
+                else if (roll < 65)
+                    cout << "\nWEATHER\n";
+                else if (roll < 75)
+                    cout <<"\nMIGRATION\n";
+                else
+                    cout <<"\nidk\n";
+                event = 10; // reset event chance.
             }
             else
             {
