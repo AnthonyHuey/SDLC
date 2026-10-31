@@ -50,8 +50,6 @@ void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
 // states for extreme weather, drought, flooding, blizzard, etc.
     // influences starvation, reproduction of certain animals.
 
-
-
 // Main
     // Initialize map, stores animall type, and the array for the list of animals
        // animal object will contain  - sspecies and age.
@@ -59,7 +57,7 @@ int main()
 {
     srand(time(0));
     map<string, array<list<Animal>, MAX>> population;
-
+    //array<string, 3> herb = {"Zebra", "Giraffe", "Gazelle"};// for random animals
        
     // Fill the map with data from file, animal species, age, etc. 
         // give an error if fail to open
@@ -110,17 +108,37 @@ int main()
                 int roll = (rand() % E_MAX);
                 cout << "\nDEBUG - Rolled a: " << roll << endl;
                 if (roll < 25 )
+                {
                     cout << "\nREPRODUCTION\n";
-                else if (roll < 35)
+                    // herbivore alwasy reproduce 50/50 for carnivore
+                    addAnimal(population, "herbivore", "test", 1);
+                    if ((rand() % E_MAX) <= 50) 
+                    {   // make animal random later ------------*
+                        addAnimal(population, "carnivore", "test", 1);
+                    }
+                }
+                else if (roll < 35) 
+                { // random amount between 1-3ish
                     cout <<"\nSTARVATION\n";
+                    population["herbivore"][YOUNG].pop_front();
+                    population["carnivore"][ADULT].pop_front();
+                }
                 else if (roll < 60)
+                {
                     cout << "\nPREDATION\n";
+                }
                 else if (roll < 65)
+                {
                     cout << "\nWEATHER\n";
+                }
                 else if (roll < 75)
+                {
                     cout <<"\nMIGRATION\n";
+                }
                 else
+                {
                     cout <<"\nidk\n";
+                }
                 event = 10; // reset event chance.
             }
             else
@@ -140,12 +158,6 @@ int main()
     }
             
 }
-  
-
-  
-    // decide if any special events occur.
-        // migration, extreame weather.
-    
     // the population of one animal influence the other is the main idea,
     // more herbivore's leads to more carnivores, which leads to less herbivores
         // a cylcle the balances itself is the idea.
