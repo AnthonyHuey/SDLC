@@ -1,2 +1,2 @@
-herbivore zebra 1
-carnivore lion 7
+herbivore Zebra 1
+carnivore Lion 7

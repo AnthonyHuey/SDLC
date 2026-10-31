@@ -43,11 +43,12 @@ void display(map<string, array<list<Animal>, MAX>> pop)
 void addAnimal(map<string, array<list<Animal>, MAX>> &pop, 
                                 string t, string s, int a)
 { 
-    pop[t][YOUNG].push_back(Animal(s, a));
+    int stage = (a < 3) ? YOUNG : (a < 8) ? ADULT : OLD; 
+    pop[t][stage].push_back(Animal(s, a));
 }
 // states for extreme weather, drought, flooding, blizzard, etc.
     // influences starvation, reproduction of certain animals.
-bool drought, flooding, blizzard = 0;
+bool drought = 0, flooding = 0, blizzard = 0;
 
 
 // Main
@@ -55,9 +56,6 @@ bool drought, flooding, blizzard = 0;
 int main()
 {
     map<string, array<list<Animal>, MAX>> population;
-
-    addAnimal(population);
-    display(population);
     ifstream fin;
     fin.open("animals.txt");
     if (fin.good())
@@ -65,11 +63,15 @@ int main()
         string type;
         string species;
         int age;
-        addAnimal(population, type, species, age);
+        while (fin >> type >> species >> age)
+            addAnimal(population, type, species, age);
         fin.close();    
     }
     else
         cout << "File not found!\n";
+
+    display(population);
+    
 
 }
         // animal object will contain  - sspecies and age.
