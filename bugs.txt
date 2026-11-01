@@ -17,3 +17,7 @@ deadAnimal doesn't work... for some reason? i changed nothing and it worked? hau
 
  need to move animals from one list to another afte they hit a certain age. ending up with 50ish young herbivores.
     in addition, make it so old animals have a chance to die from old age.
+
+hmm. after adding the moveAnimals function, the program hangs after asking to continue.
+    it's probably doing something forever, or not resolving.
+    got it. the "it" is in the new list, so the condition to end the loop is never met becasue it never reaches the end.
