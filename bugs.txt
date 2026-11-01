@@ -7,3 +7,9 @@ do i have to include everytime i forget a semicolon because i do that a lot.
 like expected i need to check if the lists are non empty before deleteing from them.
 
 had my weather reset as an "else if" at the very end, so it never went off like expected
+
+forgot the <animal> in list<animal for the deadAnimal func, yes i'm counting this.
+
+deadAnimal doesn't work... for some reason? i changed nothing and it worked? haunted VSC, happy halloween i guess. 
+
+ cout << "A herbivore died from starvation!"; was outside a else statment, so it alwasy ran.
