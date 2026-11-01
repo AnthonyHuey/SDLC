@@ -25,3 +25,5 @@ hmm. after adding the moveAnimals function, the program hangs after asking to co
 
 ugh, wanted to add a cout to moveAnimals func, doesn't work, feels like it should though?
     OK, nvm forgot the parentheses, that was driving me mad.
+
+just noticed the months start at 0 instead of 1.

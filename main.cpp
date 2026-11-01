@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <thread> // to make it seem like etime is passing.
+#include <chrono>
+
 using namespace std;
 
 //class for animals, species and age
@@ -33,7 +36,7 @@ public:
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
 const int MAX = 3, MONTHS = 12, E_MAX = 100; // Array, time loop, event roll
 bool drought = 0, flooding = 0, blizzard = 0; // weather
-bool herbPop = 0, carnPop = 0; // iss herb/carnivore overpopulated?
+bool herbPop = 0, carnPop = 0; // is herb/carnivore overpopulated?
 bool cont = 0; // for the simulation loop.
 
 // function dislpay, add, delete, count.
@@ -87,11 +90,13 @@ void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
 {
     int stage = rand() % MAX; // select a random stage
    
-    if (!pop[food][stage].empty())
-        if (stage != 1)
+    if (!pop[food][stage].empty()) // avoid killing adults, i think?
+        if (stage != ADULT)
             pop[food][stage].pop_front();
         else if (!pop[food][stage - 1].empty())
             pop[food][stage - 1].pop_front();
+        else if (!pop[food][stage + 1].empty())
+            pop[food][stage + 1].pop_front();
 }
 
 void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
@@ -160,9 +165,8 @@ int main()
         // roll a dice which decides if an event happens,
         // if an even occurs roll again to decide which one.
     // output the changes.
-    // don't forget to add a wait at the end to 'simulate' time passing.
     int event = 15; // 15% chance per month for event. +10% per miss  
-    while (cont != 1) // outer while loop to let user decide when to end sim
+    while (cont != 1) // outer while loop to let user to decide when to end sim
     {
         for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
@@ -247,12 +251,12 @@ int main()
                     cout << "\nToo many carnivore's, some go hungry...";
                     deadAnimal(population, "carnivore");
                 }
-                if (countAnimal(population, "herbivore", OLD) > 1)
+                if (countAnimal(population, "herbivore", OLD) > 3)
                 {
                     cout << "\nSome herbivore's die of old age...";
                     population["herbivore"][OLD].pop_front();
                 }
-                if (countAnimal(population, "carnivore", OLD) > 1)
+                if (countAnimal(population, "carnivore", OLD) > 3)
                 {
                     cout << "\nSome carnivore's die of old age...";
                     population["carnivore"][OLD].pop_front();
@@ -265,6 +269,7 @@ int main()
                 cout << "Nothing occured...";
                 event += 10;
             }
+            this_thread::sleep_for(chrono::seconds(1)); // "simulate" time passing
 
         }
         display(population);
@@ -279,7 +284,7 @@ int main()
             herbPop = 0;
             cout << "\nHerbivore population is normal.";
         }
-        if (countTotalAnimal(population, "carnivore") > 25)
+        if (countTotalAnimal(population, "carnivore") > 35)
         {
             carnPop = 1;
             cout << "\nCarnivore population is quite large!";
@@ -287,7 +292,7 @@ int main()
         else
         {
             carnPop = 0;
-            cout << "\nCarnivore population has returned to normal.";
+            cout << "\nCarnivore population is normal.";
         }
 
         char YN = 'Y';
