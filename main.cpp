@@ -40,7 +40,7 @@ bool cont = 0; // for the simulation loop.
 void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
                                                  string t, string s, int a)
 { 
-    int stage = (a < 3) ? YOUNG : (a < 12) ? ADULT : OLD; 
+    int stage = (a < 3) ? YOUNG : (a < 16) ? ADULT : OLD; 
     pop[t][stage].push_back(Animal(s, a));
 }
 
@@ -85,14 +85,30 @@ void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
 
 void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
 {
-    int stage = rand() % MAX; // select a random stage
-    if (!pop[food][stage].empty())
-        pop[food][stage].pop_front();
+    for (auto& type : pop) // gets the herbivore/carnivore
+    {
+        auto& stage =type.second; // for array/lists
+        // scroll through the list
+        for (auto it = stage[ADULT].begin(); it != stage[ADULT].end();)
+        {
+            if (it->getAge() >= 16) // condition to move lists
+            { // look up how splice works lol.
+                
+            }
+        }
+    }
 }
 
 void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
 {
  // scroll though the list until a certain age is hit, then splice there.
+ for (auto it = stage[YOUNG].begin(); it != stage[YOUNG].end();) // scroll list
+ {
+    if (it->getAge() >= 3) // older than 3
+    {
+        auto next =next
+    }
+ }
 }
 
 int main()
