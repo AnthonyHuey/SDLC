@@ -88,8 +88,13 @@ void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
     int stage = rand() % MAX; // select a random stage
     if (!pop[food][stage].empty())
         pop[food][stage].pop_front();
-
 }
+
+void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
+{
+ // scroll though the list until a certain age is hit, then splice there.
+}
+
 int main()
 {
     srand(time(0)); // for the random event rolls
