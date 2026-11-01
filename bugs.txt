@@ -3,3 +3,7 @@ Don't know i this counts but after adding the const array<string, MAX> herb = {"
     code still worked regardless so not really a bug, but it's the 3'rd~ish time it's happened and i've always told VSC to just ignore it.
 
 do i have to include everytime i forget a semicolon because i do that a lot.
+
+like expected i need to check if the lists are non empty before deleteing from them.
+
+had my weather reset as an "else if" at the very end, so it never went off like expected

@@ -83,7 +83,7 @@ void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
                 a.ageUp();
 }
 
-void deadAnimal(map<string, array<list, MAX>> &pop, string food)
+void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
 {
     int stage = rand() % MAX; // select a random stage
     if (!pop[food][stage].empty())
