@@ -11,6 +11,9 @@ had my weather reset as an "else if" at the very end, so it never went off like 
 forgot the <animal> in list<animal for the deadAnimal func, yes i'm counting this.
 
 deadAnimal doesn't work... for some reason? i changed nothing and it worked? haunted VSC, happy halloween i guess. 
-    just for clarity, it was highlighting the MAX part of the definition,
+    just for clarity, it was highlighting the MAX part of the definition. it was telling something about a type/value mismatch, wacky.
 
  cout << "A herbivore died from starvation!"; was outside a else statment, so it alwasy ran.
+
+ need to move animals from one list to another afte they hit a certain age. ending up with 50ish young herbivores.
+    in addition, make it so old animals have a chance to die from old age.

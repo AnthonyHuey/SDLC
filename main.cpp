@@ -40,7 +40,7 @@ bool cont = 0; // for the simulation loop.
 void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
                                                  string t, string s, int a)
 { 
-    int stage = (a < 3) ? YOUNG : (a < 8) ? ADULT : OLD; 
+    int stage = (a < 3) ? YOUNG : (a < 12) ? ADULT : OLD; 
     pop[t][stage].push_back(Animal(s, a));
 }
 
@@ -140,11 +140,12 @@ int main()
                     cout << "\nREPRODUCTION: ";
                     // herbivore alwasy reproduce, 50/50 for carnivore
                     addAnimal(population, "herbivore", herb[rand()%MAX], 1);
-                    cout << "A new herbivore was born!";
+                    addAnimal(population, "herbivore", herb[rand()%MAX], 1);
+                    cout << "A new set of herbivore was born!";
                     if ((rand() % E_MAX) <= 50) 
                     {   
                         addAnimal(population, "carnivore", carn[rand()%MAX], 1);
-                        cout << "\n\tA new carnivore was born!";
+                        cout << " And a new carnivore was born!";
                     }
                 }
                 else if (roll < 50 || ((drought || blizzard) && roll < 90)) 
@@ -156,7 +157,7 @@ int main()
                              << " a herbivore died from starvation...";
                         deadAnimal(population, "herbivore"); 
                     }
-                    if countTotalAnimal(population, "herbivore" < 10)
+                    if (countTotalAnimal(population, "herbivore") < 10)
                     {
                         cout << "Carnivore's couldn't find any herbivore's, "
                              << "3 carnivore's died from starvation...";
@@ -203,6 +204,11 @@ int main()
                     deadAnimal(population, "herbivore");
                     deadAnimal(population, "herbivore");
                 }
+                if (carnPop)
+                {
+                    cout << "Too many carnivore's, some go hungry...";
+                    deadAnimal(population, "carnivore");
+                }
               
                 event = 10; // reset event chance.
             }
@@ -215,25 +221,25 @@ int main()
         }
         display(population);
         // check if a certain pop is overpopulated.
-        if (countTotalAnimal(population, "herbivore") > 25)
+        if (countTotalAnimal(population, "herbivore") > 50)
         {
             herbPop = 1;
-             cout << "\nHerbivore population is quite large!"
+             cout << "\nHerbivore population is quite large!";
         }
-        else
+        else 
         {
             herbPop = 0;
-            cout << "\nHerbivore population has returned to normal."
+            cout << "\nHerbivore population is normal.";
         }
         if (countTotalAnimal(population, "carnivore") > 25)
         {
             carnPop = 1;
-            cout << "\n\tCarnivore population is quite large!"
+            cout << "\nCarnivore population is quite large!";
         }
         else
         {
             carnPop = 0;
-            cout << "\nCarnivore population has returned to normal."
+            cout << "\nCarnivore population has returned to normal.";
         }
 
         char YN = 'Y';
@@ -241,7 +247,7 @@ int main()
         cin >> YN;
         if (YN == 'N' || YN == 'n')
             cont = 1;
-    ageAnimal(population) // increase all animals age by 1
+    ageAnimal(population); // increase all animals age by 1
     }
     cout << "\nGoodybye!";
 }
