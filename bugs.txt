@@ -11,5 +11,6 @@ had my weather reset as an "else if" at the very end, so it never went off like 
 forgot the <animal> in list<animal for the deadAnimal func, yes i'm counting this.
 
 deadAnimal doesn't work... for some reason? i changed nothing and it worked? haunted VSC, happy halloween i guess. 
+    just for clarity, it was highlighting the MAX part of the definition,
 
  cout << "A herbivore died from starvation!"; was outside a else statment, so it alwasy ran.

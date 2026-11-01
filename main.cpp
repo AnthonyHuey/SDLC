@@ -147,11 +147,11 @@ int main()
                         cout << "\n\tA new carnivore was born!";
                     }
                 }
-                else if (roll < 50|| ((drought || blizzard) && roll < 75)) 
-                { // random amount between 1-3ish
+                else if (roll < 50 || ((drought || blizzard) && roll < 90)) 
+                {
                     cout <<"\nSTARVATION: ";
-                    if (rand() % E_MAX < 50) // rough idea
-                    { // will prob crash need to validate
+                    if (rand() % E_MAX < 50) 
+                    {
                         deadAnimal(population, "herbivore"); 
                         deadAnimal(population, "herbivore"); 
                         deadAnimal(population, "herbivore");
@@ -163,8 +163,8 @@ int main()
                         cout << "A herbivore died from starvation!";
                     }
                 }
-                else if (roll < 99 || drought || blizzard || flooding)
-                {  // start a certain weather
+                if (roll < 30 && !drought && !blizzard && !flooding)
+                {  
                     cout << "\nWEATHER: ";
                     if (rand() % E_MAX < 33) 
                     {
@@ -176,13 +176,13 @@ int main()
                         flooding = 1;
                         cout << "A flood has started!";
                     }
-                    else if (rand() % E_MAX < 99)
+                    else if (rand() % E_MAX < 100)
                     {
                         blizzard = 1;  
                         cout << "A bliizard has started!";
                     }
                 }
-                if (drought || blizzard || flooding)
+                else if (drought || blizzard || flooding)
                 {
                     drought = 0;
                     blizzard = 0;
