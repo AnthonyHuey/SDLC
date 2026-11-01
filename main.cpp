@@ -79,7 +79,7 @@ int main()
     srand(time(0)); // for the random event rolls
     map<string, array<list<Animal>, MAX>> population;
     const array<string, MAX> herb = {"Zebra", "Giraffe", "Gazelle"};
-    const array<string, MAX> carn = {"Lion", "Crocodile", "Hippopotamus"};
+    const array<string, MAX> carn = {"Lion", "Crocodile", "Leopard"};
        
     // Fill the map with data from file, animal species, age, etc. 
         // give an error if fail to open
