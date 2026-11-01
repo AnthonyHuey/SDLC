@@ -24,3 +24,4 @@ hmm. after adding the moveAnimals function, the program hangs after asking to co
     solution: couldn't get something to hold position at the old list so... don't use splice, just use a push_back, then delete the old data. easy.
 
 ugh, wanted to add a cout to moveAnimals func, doesn't work, feels like it should though?
+    OK, nvm forgot the parentheses, that was driving me mad.

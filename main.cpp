@@ -100,7 +100,7 @@ void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
         {
             if (it->getAge() >= 16) // condition to move lists
             { // easier than splice, for me.
-                cout << "\n" << it->getSpecies << " is now old!";
+                cout << "\n" << it->getSpecies() << " is now old!";
                 stage[OLD].push_back(*it); // copy the it to the new list/
                 it = stage[ADULT].erase(it); // delete from old and get next.
             }
@@ -117,7 +117,7 @@ void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
         {
             if (it->getAge() >= 16) // condition to move lists
             { 
-                cout << "\n" << it->getSpecies << " is now an adult!";
+                cout << "\n" << it->getSpecies() << " is now an adult!";
                 stage[ADULT].push_back(*it); 
                 it = stage[YOUNG].erase(it);
             }
@@ -245,7 +245,7 @@ int main()
                 }
                 if (carnPop)
                 {
-                    cout << "Too many carnivore's, some go hungry...";
+                    cout << "\nToo many carnivore's, some go hungry...";
                     deadAnimal(population, "carnivore");
                 }
               
@@ -288,6 +288,7 @@ int main()
             cont = 1;
     ageAnimal(population); // increase all animals age by 1
     moveAnimal(population); // check if any should move age brackets.
+    cout << endl;
     }
     cout << "\nGoodybye!";
 }
