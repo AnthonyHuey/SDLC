@@ -74,6 +74,12 @@ void display(map<string, array<list<Animal>, MAX>> pop)
     cout << "\t" << countAnimal(pop, "carnivore", ADULT);
     cout << "\t" << countAnimal(pop, "carnivore", OLD);
 }
+
+void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
+{
+    for (auto it = )
+
+}
 int main()
 {
     srand(time(0)); // for the random event rolls
@@ -108,7 +114,6 @@ int main()
         for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
             cout << "\nMonth " << i << ": ";
-
 // 10% chance per month for event. +10% per miss   
 // the event wieghting can be adjusted later, works for now
 // i want the population of certain groups to effect the odds.
@@ -124,15 +129,15 @@ int main()
                 {
                     cout << "\nREPRODUCTION\n";
                     // herbivore alwasy reproduce 50/50 for carnivore
-                    addAnimal(population, "herbivore", "test", 1);
+                    addAnimal(population, "herbivore", herb[rand()%MAX], 1);
                     cout << "\nA new herbivore was born!";
                     if ((rand() % E_MAX) <= 50) 
                     {   // make animal random later ------------*
-                        addAnimal(population, "carnivore", "test", 1);
+                        addAnimal(population, "carnivore", carn[rand()%MAX], 1);
                         cout << "\nA new carnivore was born!";
                     }
                 }
-                else if (roll < 35) 
+                else if (roll < 30 || ((drought || blizzard) && roll < 50)) 
                 { // random amount between 1-3ish
                     cout <<"\nSTARVATION\n";
                     if (rand() % E_MAX < 50) // rough idea
@@ -146,15 +151,8 @@ int main()
                         population["herbivore"][YOUNG].pop_front();
                         cout << "\nA herbivore died from starvation!";
                 }
-                else if (roll < 60)
-                {
-                    cout << "\nPREDATION\n";
-                    population["herbivore"][YOUNG].pop_front();
-                    cout << "\nA carnivore ate a herbivore!";
-
-                }
-                else if (roll < 65)// start a certain weather
-                { // these will effect the rolls above
+                else if (roll < 65 || drought || blizzard || flooding)
+                {  // start a certain weather
                     cout << "\nWEATHER\n";
                     if (rand() % E_MAX < 33) 
                         drought = 1;
@@ -163,6 +161,26 @@ int main()
                     else if (rand() % E_MAX < 99)
                         blizzard = 1;  
                 }
+                else if (drought || blizzard || flooding)
+                {
+                    drought = 0;
+                    blizzard = 0;
+                    flooding = 0;
+                }
+                if (roll < 25 || (!blizzard && !flooding && roll < 50)) 
+                { // independant from the rolls above.
+                    cout << "\nPREDATION\n";
+                    population["herbivore"][YOUNG].pop_front();
+                    cout << "\nA carnivore ate a herbivore!";
+                }
+                if (herbPop)
+                {
+                    cout << "carnivore's ate an excess of herbivore's!";
+                    population["herbivore"][YOUNG].pop_front();
+                    population["herbivore"][YOUNG].pop_back();
+                    population["herbivore"][YOUNG].pop_front();
+                }
+              
                 event = 10; // reset event chance.
             }
             else
@@ -173,6 +191,16 @@ int main()
 
         }
         display(population);
+        // check if a certain pop is overpopulated.
+        if (countTotalAnimal(population, "herbivore") > 25)
+            herbPop = 1;
+        else
+            herbPop = 0;
+        if (countTotalAnimal(population, "carnivore") > 25)
+            carnPop = 1;
+        else
+            carnPop = 0;
+
         char YN = 'Y';
         cout << "\nWould you like to continue the simulation? (Y/N): ";
         cin >> YN;
