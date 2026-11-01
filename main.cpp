@@ -78,7 +78,8 @@ int main()
 {
     srand(time(0)); // for the random event rolls
     map<string, array<list<Animal>, MAX>> population;
-    //array<string, 3> herb = {"Zebra", "Giraffe", "Gazelle"};// for random animals
+    const array<string, MAX> herb = {"Zebra", "Giraffe", "Gazelle"};
+    const array<string, MAX> carn = {"Lion", "Crocodile", "Hippopotamus"};
        
     // Fill the map with data from file, animal species, age, etc. 
         // give an error if fail to open
@@ -96,10 +97,6 @@ int main()
     }
     else
         cout << "File not found!\n";
-
-    display(population);
-    
-
     // Begin the simulation, user can loop as many times as they want.
         // roll a dice which decides if an event happens,
         // if an even occurs roll again to decide which one.
