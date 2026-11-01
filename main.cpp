@@ -86,8 +86,12 @@ void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
 void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
 {
     int stage = rand() % MAX; // select a random stage
+   
     if (!pop[food][stage].empty())
-        pop[food][stage].pop_front();
+        if (stage != 1)
+            pop[food][stage].pop_front();
+        else if (!pop[food][stage - 1].empty())
+            pop[food][stage - 1].pop_front();
 }
 
 void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
@@ -157,18 +161,13 @@ int main()
         // if an even occurs roll again to decide which one.
     // output the changes.
     // don't forget to add a wait at the end to 'simulate' time passing.
-    int event = 10;
+    int event = 15; // 15% chance per month for event. +10% per miss  
     while (cont != 1) // outer while loop to let user decide when to end sim
     {
         for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
-            cout << "\nMonth " << i << ": ";
-// 10% chance per month for event. +10% per miss   
-// the event wieghting can be adjusted later, works for now
-// i want the population of certain groups to effect the odds.
-//      more herbivores means predation is more likely, 
-//      less herbivores mean starvation for carnivores is more likely and so on.
-// the weather add another push/pull to the odds, can be added later easy.
+            cout << "\nMonth " << i + 1 << ": ";
+ 
             if ((rand() % E_MAX) <= event)
             {
                 cout << "Got an event!";
@@ -247,6 +246,16 @@ int main()
                 {
                     cout << "\nToo many carnivore's, some go hungry...";
                     deadAnimal(population, "carnivore");
+                }
+                if (countAnimal(population, "herbivore", OLD) > 1)
+                {
+                    cout << "\nSome herbivore's die of old age...";
+                    population["herbivore"][OLD].pop_front();
+                }
+                if (countAnimal(population, "carnivore", OLD) > 1)
+                {
+                    cout << "\nSome carnivore's die of old age...";
+                    population["carnivore"][OLD].pop_front();
                 }
               
                 event = 10; // reset event chance.
