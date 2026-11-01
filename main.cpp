@@ -99,32 +99,34 @@ void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
         for (auto it = stage[ADULT].begin(); it != stage[ADULT].end();)
         {
             if (it->getAge() >= 16) // condition to move lists
-            { // move the it to the new list, go next
-                auto hold = it;// hold position in the old list
-                hold++;// advance to next one.
-                stage[OLD].splice(stage[OLD].end(), stage[ADULT], it);
-                //cout << "\n" << it->getSpecies << " is now old!";
-                it = hold;// point the it back.
+            { // easier than splice, for me.
+                cout << "\n" << it->getSpecies << " is now old!";
+                stage[OLD].push_back(*it); // copy the it to the new list/
+                it = stage[ADULT].erase(it); // delete from old and get next.
             }
+            else
+                it++;
         }
     }
 
-    for (auto& type : pop) // gets the herbivore/carnivore young -> adult
+    for (auto& type : pop) // gets the herbivore/carnivore. adult -> old
     {
         auto& stage = type.second; // for array/lists
         // scroll through the list
         for (auto it = stage[YOUNG].begin(); it != stage[YOUNG].end();)
         {
             if (it->getAge() >= 16) // condition to move lists
-            { // move the it to the new list, go next
-                auto hold = it; 
-                hold++; 
-                stage[ADULT].splice(stage[ADULT].end(), stage[YOUNG], it);
-                //cout << "\n" << it->getSpecies << " is now an adult!";
-                it = hold; 
+            { 
+                cout << "\n" << it->getSpecies << " is now an adult!";
+                stage[ADULT].push_back(*it); 
+                it = stage[YOUNG].erase(it);
             }
+            else
+                it++;
         }
     }
+
+    
 }
 
 int main()

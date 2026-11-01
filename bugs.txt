@@ -21,3 +21,6 @@ deadAnimal doesn't work... for some reason? i changed nothing and it worked? hau
 hmm. after adding the moveAnimals function, the program hangs after asking to continue.
     it's probably doing something forever, or not resolving.
     got it. the "it" is in the new list, so the condition to end the loop is never met becasue it never reaches the end.
+    solution: couldn't get something to hold position at the old list so... don't use splice, just use a push_back, then delete the old data. easy.
+
+ugh, wanted to add a cout to moveAnimals func, doesn't work, feels like it should though?
