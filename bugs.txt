@@ -1,0 +1,5 @@
+Don't know i this counts but after adding the const array<string, MAX> herb = {"Zebra", "Giraffe", "Gazelle"}; 
+    all of my cout kinda broke? VSC gave them a red squiggle and the error i was given was "cout is too vague", whatever that means. 
+    code still worked regardless so not really a bug, but it's the 3'rd~ish time it's happened and i've always told VSC to just ignore it.
+
+do i have to include everytime i forget a semicolon because i do that a lot.

@@ -32,7 +32,7 @@ public:
 
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
 const int MAX = 3, MONTHS = 12, E_MAX = 100; // Array, time loop, event roll
-bool drought = 0, flooding = 0, blizzard = 0, // weather
+bool drought = 0, flooding = 0, blizzard = 0; // weather
 bool herbPop = 0, carnPop = 0; // iss herb/carnivore overpopulated?
 bool cont = 0; // for the simulation loop.
 
@@ -76,8 +76,18 @@ void display(map<string, array<list<Animal>, MAX>> pop)
 }
 
 void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
+{ // ages up all the animal, might aswell use that class i made.
+    for (auto& type : pop )
+        for (auto& stage : type.second)
+            for (Animal& a : stage)
+                a.ageUp();
+}
+
+void deadAnimal(map<string, array<list, MAX>> &pop, string food)
 {
-    for (auto it = )
+    int stage = rand() % MAX; // select a random stage
+    if (!pop[food][stage].empty())
+        pop[food][stage].pop_front();
 
 }
 int main()
@@ -124,61 +134,71 @@ int main()
             {
                 cout << "Got an event!";
                 int roll = (rand() % E_MAX);
-                cout << "\nDEBUG - Rolled a: " << roll << endl;
-                if (roll < 25 )
+                //cout << "\nDEBUG - Rolled a: " << roll;
+                if (roll < 50 )
                 {
-                    cout << "\nREPRODUCTION\n";
-                    // herbivore alwasy reproduce 50/50 for carnivore
+                    cout << "\nREPRODUCTION: ";
+                    // herbivore alwasy reproduce, 50/50 for carnivore
                     addAnimal(population, "herbivore", herb[rand()%MAX], 1);
-                    cout << "\nA new herbivore was born!";
+                    cout << "A new herbivore was born!";
                     if ((rand() % E_MAX) <= 50) 
-                    {   // make animal random later ------------*
+                    {   
                         addAnimal(population, "carnivore", carn[rand()%MAX], 1);
-                        cout << "\nA new carnivore was born!";
+                        cout << "\n\tA new carnivore was born!";
                     }
                 }
-                else if (roll < 30 || ((drought || blizzard) && roll < 50)) 
+                else if (roll < 15 || ((drought || blizzard) && roll < 75)) 
                 { // random amount between 1-3ish
-                    cout <<"\nSTARVATION\n";
+                    cout <<"\nSTARVATION: ";
                     if (rand() % E_MAX < 50) // rough idea
                     { // will prob crash need to validate
-                        population["herbivore"][YOUNG].pop_front();
-                        population["herbivore"][YOUNG].pop_front();
-                        population["herbivore"][YOUNG].pop_front();
-                        cout << "\n3 herbivore's died from starvation!";
+                        deadAnimal(population, "herbivore"); 
+                        deadAnimal(population, "herbivore"); 
+                        deadAnimal(population, "herbivore");
+                        cout << "3 herbivore's died from starvation!";
                     }
                     else
-                        population["herbivore"][YOUNG].pop_front();
-                        cout << "\nA herbivore died from starvation!";
+                        deadAnimal(population, "herbivore");
+                        cout << "A herbivore died from starvation!";
                 }
-                else if (roll < 65 || drought || blizzard || flooding)
+                else if (roll < 99 || drought || blizzard || flooding)
                 {  // start a certain weather
-                    cout << "\nWEATHER\n";
+                    cout << "\nWEATHER: ";
                     if (rand() % E_MAX < 33) 
+                    {
                         drought = 1;
+                        cout << "A drought has started!";
+                    }
                     else if (rand() % E_MAX < 66)
+                    {
                         flooding = 1;
+                        cout << "A flood has started!";
+                    }
                     else if (rand() % E_MAX < 99)
+                    {
                         blizzard = 1;  
+                        cout << "A bliizard has started!";
+                    }
                 }
-                else if (drought || blizzard || flooding)
+                if (drought || blizzard || flooding)
                 {
                     drought = 0;
                     blizzard = 0;
                     flooding = 0;
+                    cout << "\nThe weather has returned to normal...";
                 }
                 if (roll < 25 || (!blizzard && !flooding && roll < 50)) 
                 { // independant from the rolls above.
-                    cout << "\nPREDATION\n";
-                    population["herbivore"][YOUNG].pop_front();
-                    cout << "\nA carnivore ate a herbivore!";
+                    cout << "\nPREDATION: ";
+                    deadAnimal(population, "herbivore");
+                    cout << "A carnivore ate a herbivore!";
                 }
                 if (herbPop)
                 {
-                    cout << "carnivore's ate an excess of herbivore's!";
-                    population["herbivore"][YOUNG].pop_front();
-                    population["herbivore"][YOUNG].pop_back();
-                    population["herbivore"][YOUNG].pop_front();
+                    cout << "\ncarnivore's ate an excess of herbivore's!";
+                    deadAnimal(population, "herbivore");
+                    deadAnimal(population, "herbivore");
+                    deadAnimal(population, "herbivore");
                 }
               
                 event = 10; // reset event chance.
