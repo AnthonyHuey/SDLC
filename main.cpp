@@ -31,8 +31,9 @@ public:
 };
 
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
-const int MAX = 3, MONTHS = 12, E_MAX = 100; // eventually set MAX & MIN for each type of animal
+const int MAX = 3, MONTHS = 12, E_MAX = 100; // Array, time loop, event roll
 bool drought = 0, flooding = 0, blizzard = 0, // weather
+bool herbPop = 0, carnPop = 0; // iss herb/carnivore overpopulated?
 bool cont = 0; // for the simulation loop.
 
 // function dislpay, add, delete, count.
