@@ -1,0 +1,7 @@
+Test what happens when the animal map is empty, will probably crash a delete, maybe also the count functions
+    test an empty animal map
+vice versas, can the map get too full? probably not. 
+    test 10000-ish animals
+other problems are more logic based, do the carnivores just eat the herbivores, does everyone just starve to death etc.
+    run the sim a few times and check results to see if anything funky is happening.
+    could probably write a function to average a bunch of sims at once...

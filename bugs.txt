@@ -1,0 +1,29 @@
+Don't know i this counts but after adding the const array<string, MAX> herb = {"Zebra", "Giraffe", "Gazelle"}; 
+    all of my cout kinda broke? VSC gave them a red squiggle and the error i was given was "cout is too vague", whatever that means. 
+    code still worked regardless so not really a bug, but it's the 3'rd~ish time it's happened and i've always told VSC to just ignore it.
+
+do i have to include everytime i forget a semicolon because i do that a lot. Add forgetting () for the if statements lol
+
+like expected i need to check if the lists are non empty before deleteing from them.
+
+had my weather reset as an "else if" at the very end, so it never went off like expected
+
+forgot the <animal> in list<animal for the deadAnimal func, yes i'm counting this.
+
+deadAnimal doesn't work... for some reason? i changed nothing and it worked? haunted VSC, happy halloween i guess. 
+    just for clarity, it was highlighting the MAX part of the definition. it was telling something about a type/value mismatch, wacky.
+
+ cout << "A herbivore died from starvation!"; was outside a else statment, so it alwasy ran.
+
+ need to move animals from one list to another afte they hit a certain age. ending up with 50ish young herbivores.
+    in addition, make it so old animals have a chance to die from old age.
+
+hmm. after adding the moveAnimals function, the program hangs after asking to continue.
+    it's probably doing something forever, or not resolving.
+    got it. the "it" is in the new list, so the condition to end the loop is never met becasue it never reaches the end.
+    solution: couldn't get something to hold position at the old list so... don't use splice, just use a push_back, then delete the old data. easy.
+
+ugh, wanted to add a cout to moveAnimals func, doesn't work, feels like it should though?
+    OK, nvm forgot the parentheses, that was driving me mad.
+
+just noticed the months start at 0 instead of 1.

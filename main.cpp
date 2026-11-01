@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <thread> // to make it seem like etime is passing.
+#include <chrono>
+
 using namespace std;
 
 //class for animals, species and age
@@ -31,15 +34,16 @@ public:
 };
 
 enum Stage {YOUNG, ADULT, OLD}; // easier to code with
-const int MAX = 3, MONTHS = 12, E_MAX = 100; // eventually set MAX & MIN for each type of animal
-bool drought = 0, flooding = 0, blizzard = 0, // weather
+const int MAX = 3, MONTHS = 12, E_MAX = 100; // Array, time loop, event roll
+bool drought = 0, flooding = 0, blizzard = 0; // weather
+bool herbPop = 0, carnPop = 0; // is herb/carnivore overpopulated?
 bool cont = 0; // for the simulation loop.
 
 // function dislpay, add, delete, count.
 void addAnimal(map<string, array<list<Animal>, MAX>> &pop,
                                                  string t, string s, int a)
 { 
-    int stage = (a < 3) ? YOUNG : (a < 8) ? ADULT : OLD; 
+    int stage = (a < 3) ? YOUNG : (a < 12) ? ADULT : OLD; 
     pop[t][stage].push_back(Animal(s, a));
 }
 
@@ -73,11 +77,73 @@ void display(map<string, array<list<Animal>, MAX>> pop)
     cout << "\t" << countAnimal(pop, "carnivore", ADULT);
     cout << "\t" << countAnimal(pop, "carnivore", OLD);
 }
+
+void ageAnimal(map<string, array<list<Animal>, MAX>> &pop)
+{ // ages up all the animal, might aswell use that class i made.
+    for (auto& type : pop )
+        for (auto& stage : type.second)
+            for (Animal& a : stage)
+                a.ageUp();
+}
+
+void deadAnimal(map<string, array<list<Animal>, MAX>> &pop, string food)
+{
+    int stage = rand() % MAX; // select a random stage
+   
+    if (!pop[food][stage].empty()) // avoid killing adults, i think?
+        if (stage != ADULT)
+            pop[food][stage].pop_front();
+        else if (!pop[food][stage - 1].empty())
+            pop[food][stage - 1].pop_front();
+        else if (!pop[food][stage + 1].empty())
+            pop[food][stage + 1].pop_front();
+}
+
+void moveAnimal(map<string, array<list<Animal>, MAX>> &pop)
+{
+    for (auto& type : pop) // gets the herbivore/carnivore. adult -> old
+    {
+        auto& stage = type.second; // for array/lists
+        // scroll through the list
+        for (auto it = stage[ADULT].begin(); it != stage[ADULT].end();)
+        {
+            if (it->getAge() >= 16) // condition to move lists
+            { // easier than splice, for me.
+                cout << "\n" << it->getSpecies() << " is now old!";
+                stage[OLD].push_back(*it); // copy the it to the new list/
+                it = stage[ADULT].erase(it); // delete from old and get next.
+            }
+            else
+                it++;
+        }
+    }
+
+    for (auto& type : pop) // gets the herbivore/carnivore. adult -> old
+    {
+        auto& stage = type.second; // for array/lists
+        // scroll through the list
+        for (auto it = stage[YOUNG].begin(); it != stage[YOUNG].end();)
+        {
+            if (it->getAge() >= 16) // condition to move lists
+            { 
+                cout << "\n" << it->getSpecies() << " is now an adult!";
+                stage[ADULT].push_back(*it); 
+                it = stage[YOUNG].erase(it);
+            }
+            else
+                it++;
+        }
+    }
+
+    
+}
+
 int main()
 {
     srand(time(0)); // for the random event rolls
     map<string, array<list<Animal>, MAX>> population;
-    //array<string, 3> herb = {"Zebra", "Giraffe", "Gazelle"};// for random animals
+    const array<string, MAX> herb = {"Zebra", "Giraffe", "Gazelle"};
+    const array<string, MAX> carn = {"Lion", "Crocodile", "Leopard"};
        
     // Fill the map with data from file, animal species, age, etc. 
         // give an error if fail to open
@@ -95,76 +161,107 @@ int main()
     }
     else
         cout << "File not found!\n";
-
-    display(population);
-    
-
     // Begin the simulation, user can loop as many times as they want.
         // roll a dice which decides if an event happens,
         // if an even occurs roll again to decide which one.
     // output the changes.
-    // don't forget to add a wait at the end to 'simulate' time passing.
-    int event = 10;
-    while (cont != 1) // outer while loop to let user decide when to end sim
+    int event = 15; // 15% chance per month for event. +10% per miss  
+    while (cont != 1) // outer while loop to let user to decide when to end sim
     {
         for(int i = 0; i < MONTHS; i++) // progress by "months"
         {
-            cout << "\nMonth " << i << ": ";
-
-// 10% chance per month for event. +10% per miss   
-// the event wieghting can be adjusted later, works for now
-// i want the population of certain groups to effect the odds.
-//      more herbivores means predation is more likely, 
-//      less herbivores mean starvation for carnivores is more likely and so on.
-// the weather add another push/pull to the odds, can be added later easy.
+            cout << "\nMonth " << i + 1 << ": ";
+ 
             if ((rand() % E_MAX) <= event)
             {
                 cout << "Got an event!";
                 int roll = (rand() % E_MAX);
-                cout << "\nDEBUG - Rolled a: " << roll << endl;
-                if (roll < 25 )
+                //cout << "\nDEBUG - Rolled a: " << roll;
+                if (roll < 35 )
                 {
-                    cout << "\nREPRODUCTION\n";
-                    // herbivore alwasy reproduce 50/50 for carnivore
-                    addAnimal(population, "herbivore", "test", 1);
-                    cout << "\nA new herbivore was born!";
+                    cout << "\nREPRODUCTION: ";
+                    // herbivore alwasy reproduce, 50/50 for carnivore
+                    addAnimal(population, "herbivore", herb[rand()%MAX], 1);
+                    addAnimal(population, "herbivore", herb[rand()%MAX], 1);
+                    cout << "A new set of herbivore was born!";
                     if ((rand() % E_MAX) <= 50) 
-                    {   // make animal random later ------------*
-                        addAnimal(population, "carnivore", "test", 1);
-                        cout << "\nA new carnivore was born!";
+                    {   
+                        addAnimal(population, "carnivore", carn[rand()%MAX], 1);
+                        cout << " And a new carnivore was born!";
                     }
                 }
-                else if (roll < 35) 
-                { // random amount between 1-3ish
-                    cout <<"\nSTARVATION\n";
-                    if (rand() % E_MAX < 50) // rough idea
-                    { // will prob crash need to validate
-                        population["herbivore"][YOUNG].pop_front();
-                        population["herbivore"][YOUNG].pop_front();
-                        population["herbivore"][YOUNG].pop_front();
-                        cout << "\n3 herbivore's died from starvation!";
-                    }
-                    else
-                        population["herbivore"][YOUNG].pop_front();
-                        cout << "\nA herbivore died from starvation!";
-                }
-                else if (roll < 60)
+                else if (roll < 50 || ((drought || blizzard) && roll < 90)) 
                 {
-                    cout << "\nPREDATION\n";
-                    population["herbivore"][YOUNG].pop_front();
-                    cout << "\nA carnivore ate a herbivore!";
-
+                    cout <<"\nDEATH: ";
+                    if (drought || blizzard) 
+                    {
+                        cout << "Herbivore's couldn't find any food, "
+                             << " a herbivore died from starvation...";
+                        deadAnimal(population, "herbivore"); 
+                    }
+                    if (countTotalAnimal(population, "herbivore") < 10)
+                    {
+                        cout << "Carnivore's couldn't find any herbivore's, "
+                             << "3 carnivore's died from starvation...";
+                        for (int i = 0; i < MAX; i++)
+                            deadAnimal(population, "carnivore");        
+                    }
                 }
-                else if (roll < 65)// start a certain weather
-                { // these will effect the rolls above
-                    cout << "\nWEATHER\n";
+                if (roll < 30 && !drought && !blizzard && !flooding)
+                {  
+                    cout << "\nWEATHER: ";
                     if (rand() % E_MAX < 33) 
+                    {
                         drought = 1;
+                        cout << "A drought has started!";
+                    }
                     else if (rand() % E_MAX < 66)
+                    {
                         flooding = 1;
-                    else if (rand() % E_MAX < 99)
+                        cout << "A flood has started!";
+                    }
+                    else if (rand() % E_MAX < 100)
+                    {
                         blizzard = 1;  
+                        cout << "A bliizard has started!";
+                    }
                 }
+                else if (drought || blizzard || flooding)
+                {
+                    drought = 0;
+                    blizzard = 0;
+                    flooding = 0;
+                    cout << "\nThe weather has returned to normal...";
+                }
+                if (roll < 25 || (!blizzard && !flooding && roll < 50)) 
+                { // independant from the rolls above.
+                    cout << "\nPREDATION: ";
+                    deadAnimal(population, "herbivore");
+                    cout << "A carnivore ate a herbivore!";
+                }
+                if (herbPop)
+                {
+                    cout << "\ncarnivore's ate an excess of herbivore's!";
+                    deadAnimal(population, "herbivore");
+                    deadAnimal(population, "herbivore");
+                    deadAnimal(population, "herbivore");
+                }
+                if (carnPop)
+                {
+                    cout << "\nToo many carnivore's, some go hungry...";
+                    deadAnimal(population, "carnivore");
+                }
+                if (countAnimal(population, "herbivore", OLD) > 3)
+                {
+                    cout << "\nSome herbivore's die of old age...";
+                    population["herbivore"][OLD].pop_front();
+                }
+                if (countAnimal(population, "carnivore", OLD) > 3)
+                {
+                    cout << "\nSome carnivore's die of old age...";
+                    population["carnivore"][OLD].pop_front();
+                }
+              
                 event = 10; // reset event chance.
             }
             else
@@ -172,14 +269,40 @@ int main()
                 cout << "Nothing occured...";
                 event += 10;
             }
+            this_thread::sleep_for(chrono::seconds(1)); // "simulate" time passing
 
         }
         display(population);
+        // check if a certain pop is overpopulated.
+        if (countTotalAnimal(population, "herbivore") > 50)
+        {
+            herbPop = 1;
+             cout << "\nHerbivore population is quite large!";
+        }
+        else 
+        {
+            herbPop = 0;
+            cout << "\nHerbivore population is normal.";
+        }
+        if (countTotalAnimal(population, "carnivore") > 35)
+        {
+            carnPop = 1;
+            cout << "\nCarnivore population is quite large!";
+        }
+        else
+        {
+            carnPop = 0;
+            cout << "\nCarnivore population is normal.";
+        }
+
         char YN = 'Y';
         cout << "\nWould you like to continue the simulation? (Y/N): ";
         cin >> YN;
         if (YN == 'N' || YN == 'n')
             cont = 1;
+    ageAnimal(population); // increase all animals age by 1
+    moveAnimal(population); // check if any should move age brackets.
+    cout << endl;
     }
     cout << "\nGoodybye!";
 }
